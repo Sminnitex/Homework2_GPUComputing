@@ -12,8 +12,8 @@ int main(int argc, char *argv[]){
     srand(time(NULL));
     int power = strtol(argv[1], NULL, 10);
     long number = pow(2, power);
-    int block = number / 32;
-    printf("%d \n", block);
+    int block = number / 64;
+    printf("block size = %d \n", block);
 
     float **matrix = matrixInitialize(number, number);
     float **matrix2 = matrixInitialize(number, number);

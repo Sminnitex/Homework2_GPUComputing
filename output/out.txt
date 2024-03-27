@@ -1,3 +1,3 @@
-32 
-Time spent = 111.210531 seconds
+16 
+Time spent = 128.150047 seconds
 Memory usage = 12582912 bytes
