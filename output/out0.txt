@@ -1,0 +1,2 @@
+Time spent = 259.013971 seconds
+Memory usage = 12582912 bytes
