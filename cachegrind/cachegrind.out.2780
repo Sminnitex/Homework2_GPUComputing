@@ -1,0 +1,226 @@
+cmd: ./bin/assignment 10
+events: Ir
+fl=???
+fn=(below main)
+0 83
+fn=???
+0 2942837
+fn=_Exit
+0 7
+fn=_IO_default_xsputn
+0 82
+fn=_IO_do_write
+0 69
+fn=_IO_doallocbuf
+0 26
+fn=_IO_file_doallocate
+0 51
+fn=_IO_file_overflow
+0 74
+fn=_IO_file_setbuf
+0 14
+fn=_IO_file_stat
+0 3
+fn=_IO_file_sync
+0 18
+fn=_IO_file_write
+0 37
+fn=_IO_file_xsputn
+0 388
+fn=_IO_setb
+0 24
+fn=__acos_finite
+0 8
+fn=__asin_finite
+0 8
+fn=__atan2_finite
+0 9
+fn=__call_tls_dtors
+0 12
+fn=__ctype_init
+0 17
+fn=__cxa_atexit
+0 39
+fn=__cxa_finalize
+0 168
+fn=__default_morecore
+0 18631
+fn=__exp_finite
+0 9
+fn=__libc_alloca_cutoff
+0 11
+fn=__libc_early_init
+0 50
+fn=__log_finite
+0 9
+fn=__pow_finite
+0 8
+fn=__printf_chk
+0 98
+fn=__printf_fp
+0 7
+fn=__sigsetjmp
+0 22
+fn=__tunable_get_val
+0 698
+fn=_dl_allocate_tls_init
+0 102
+fn=_dl_audit_preinit
+0 5
+fn=_dl_catch_error
+0 23
+fn=_dl_catch_exception
+0 210
+fn=_dl_debug_state
+0 4
+fn=_setjmp
+0 3
+fn=bcmp
+0 25
+fn=brk
+0 578
+fn=clock
+0 48
+fn=clock_gettime
+0 22
+fn=cos
+0 9
+fn=cosf
+0 9
+fn=exit
+0 8
+fn=exp2f
+0 9
+fn=expf
+0 9
+fn=findMin(int, int)
+0 5918720
+fn=fma
+0 6
+fn=free
+0 51250
+fn=fstat
+0 7
+fn=fstatat
+0 8
+fn=getrandom
+0 9
+fn=getrlimit
+0 10
+fn=index
+0 22
+fn=log2f
+0 9
+fn=logf
+0 9
+fn=main
+0 19003344
+fn=malloc
+0 88205
+fn=matrixDestroyer(float**, int)
+0 10272
+fn=matrixInitialize(int, int)
+0 12344
+fn=memchr
+0 25
+fn=memcpy
+0 24
+fn=memmove
+0 48
+fn=mempcpy
+0 24
+fn=memrchr
+0 24
+fn=memset
+0 26
+fn=mmap
+0 9
+fn=pow
+0 19
+fn=powf
+0 9
+fn=pthread_mutex_lock
+0 43
+fn=pthread_mutex_unlock
+0 34
+fn=rand
+0 5242880
+fn=random
+0 22020096
+fn=random_r
+0 33419132
+fn=randomf()
+0 8388608
+fn=rawmemchr
+0 25
+fn=rindex
+0 24
+fn=sbrk
+0 39714
+fn=sin
+0 9
+fn=sincosf
+0 9
+fn=sinf
+0 9
+fn=srand
+0 16
+fn=srandom_r
+0 6830
+fn=stpcpy
+0 20
+fn=stpncpy
+0 20
+fn=strcasecmp
+0 7
+fn=strcasecmp_l
+0 7
+fn=strcat
+0 20
+fn=strchrnul
+0 24
+fn=strcmp
+0 17
+fn=strcpy
+0 20
+fn=strcspn
+0 7
+fn=strlen
+0 24
+fn=strncasecmp
+0 7
+fn=strncasecmp_l
+0 7
+fn=strncmp
+0 17
+fn=strncpy
+0 20
+fn=strnlen
+0 48
+fn=strpbrk
+0 7
+fn=strspn
+0 7
+fn=strtol
+0 5
+fn=time
+0 7
+fn=wcschr
+0 48
+fn=wcscmp
+0 24
+fn=wcscpy
+0 7
+fn=wcslen
+0 22
+fn=wcsnlen
+0 22
+fn=wmemchr
+0 50
+fn=wmemcmp
+0 25
+fn=wmemset
+0 38
+fn=write
+0 9
+summary: 97166969

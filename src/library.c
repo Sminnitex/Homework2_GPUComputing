@@ -13,10 +13,12 @@ float **matrixInitialize(int rows, int cols){
     for (int i = 0; i < rows; i++){
         matrix[i] = (float*)malloc(cols * sizeof(float));
     }
+
     if (matrix == NULL) {
         fprintf(stderr, "Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
+
     return matrix;
 }
 

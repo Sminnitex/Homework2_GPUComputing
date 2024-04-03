@@ -5,13 +5,13 @@ INCLUDE = -Isrc
 OPT = -std=c++14 -O3
 
 #CODE
-MAIN = gemmblock.c
+MAIN = transpose.c
 
 ######################################################################################################
 BUILDDIR := obj
 TARGETDIR := bin
 
-all: $(TARGETDIR)/lab2part2
+all: $(TARGETDIR)/assignment
 
 debug: OPT += -DDEBUG -g
 debug: NVCC_FLAG += -G
@@ -19,7 +19,7 @@ debug: all
 
 OBJECTS = $(BUILDDIR)/library.o
 
-$(TARGETDIR)/lab2part2: $(MAIN) $(OBJECTS)
+$(TARGETDIR)/assignment: $(MAIN) $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CC) $^ -o $@ $(INCLUDE) $(LIBS) $(OPT) 
 

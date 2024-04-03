@@ -1,2 +1,3 @@
-Time spent = 259.013971 seconds
-Memory usage = 12582912 bytes
+block size = 16 
+Time spent = 0.549800 seconds
+Memory usage = 8388608 bytes
