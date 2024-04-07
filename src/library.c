@@ -42,3 +42,23 @@ void printMatrix(float **matrix, int rows, int cols){
 int findMin(int num1, int num2){
     return (num1 > num2) ? num2 : num1;
 }
+
+void transposeMatrix (float **matrix, float **transpose, int rows, int cols){
+    for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++){
+            transpose[i][j] = matrix[j][i];
+         }
+    }
+}
+
+void transposeBlockMatrix (float **matrix, float **transpose, int rows, int cols, int block){
+    for (int jj = 0; jj < cols; jj += block) {
+            for (int ii = 0; ii < rows; ii+=block) {
+                for (int j = jj; j < findMin(jj + block, cols); j++) {
+                    for (int i = ii; i < findMin(ii + block, rows); i++){
+                        transpose[i][j] = matrix[j][i];
+                    }
+                }
+            }
+    }
+}

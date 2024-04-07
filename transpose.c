@@ -9,9 +9,11 @@ int main(int argc, char *argv[]){
     //Initialize all the stuff we need
     srand(time(NULL));
     int power = strtol(argv[1], NULL, 10);
-    long number = pow(2, power);
-    int block = number / 64;
-    printf("block size = %d \n", block);
+    long arrive = pow(2, power);
+    int block = arrive / 64;
+    //long long number = arrive-10 << arrive;
+    long number = arrive;
+    //printf("block size = %d \n", block);
 
     float **matrix = matrixInitialize(number, number);
 
@@ -22,33 +24,34 @@ int main(int argc, char *argv[]){
         }
     }
 
-    //Matrix block transpose
-    float **transposeBlock = matrixInitialize(number, number);
     
-    clock_t begin = clock();
-    for (int jj = 0; jj < number; jj += block) {
-            for (int ii = 0; ii < number; ii+=block) {
-                for (int j = jj; j < findMin(jj + block, number); j++) {
-                    for (int i = ii; i < findMin(ii + block, number); i++){
-                        transposeBlock[i][j] = matrix[j][i];
-                    }
-                }
-            }
-    }
-    clock_t end = clock();
-    double time = (double) (end-begin) / CLOCKS_PER_SEC;
-    printf("Block matrix transpose = %f seconds\n", time); 
-
-        //Matrix normal transpose
+    float **transposeBlock = matrixInitialize(number, number);
     float **transpose = matrixInitialize(number, number);
 
-    clock_t begin2 = clock();
-    for (int j = 0; j < number; j++) {
-        for (int i = 0; i < number; i++){
-            transpose[i][j] = matrix[j][i];
-         }
+    //check validity
+    if (matrix == NULL || transposeBlock == NULL || transpose == NULL){
+        return 1; // ERROR: malloc did not work
     }
-                  
+
+    long long tries = 1 << 10;
+    double time, time2;
+
+    //tries loop
+    for (int count = 0; count < tries; count++){
+        //Matrix block transpose
+        clock_t begin = clock();
+        transposeBlockMatrix(matrix, transposeBlock, number, number, block);
+        clock_t end = clock();
+        time = (double) (end-begin) / CLOCKS_PER_SEC;
+        printf("%f\n", time); 
+
+        //Matrix normal transpose
+        //clock_t begin2 = clock();
+        //transposeMatrix(matrix, transpose, number, number);
+        //clock_t end2 = clock();
+        //time2 = (double) (end2-begin2) / CLOCKS_PER_SEC;
+        //printf("%f\n", time2);  
+    }      
 
     //Lines for debug purposes
     //printMatrix(matrix, number, number);
@@ -56,12 +59,10 @@ int main(int argc, char *argv[]){
     //printMatrix(transpose, number, number);
 
     //Let's close everything
-    clock_t end2 = clock();
-    double time2 = (double) (end2-begin2) / CLOCKS_PER_SEC;
-    printf("Normal matrix transpose = %f seconds\n", time2);
+    
 
-    int memory_usage = 3 * number * number * sizeof(float);
-    printf("Memory usage = %d bytes\n", memory_usage);
+    //int memory_usage = 3 * number * number * sizeof(float);
+    //printf("Memory usage = %d bytes\n", memory_usage);
 
     matrixDestroyer(matrix, number);
     matrixDestroyer(transposeBlock, number);
