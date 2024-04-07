@@ -1,3 +1,4 @@
 block size = 16 
-Time spent = 0.445477 seconds
-Memory usage = 8388608 bytes
+Block matrix transpose = 0.500395 seconds
+Normal matrix transpose = 0.096626 seconds
+Memory usage = 12582912 bytes

@@ -2,7 +2,7 @@ CC = c++
 LIB_HOME = /mnt/c/Users/Michele/source/repos/GPU
 LIBS = -L$(LIB_HOME)/lib64
 INCLUDE = -Isrc
-OPT = -std=c++14 -O3
+OPT = -std=c++14 #-O0
 
 #CODE
 MAIN = transpose.c
