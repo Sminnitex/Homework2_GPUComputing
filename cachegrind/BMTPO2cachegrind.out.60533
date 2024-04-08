@@ -4,7 +4,7 @@ fl=???
 fn=(below main)
 0 83
 fn=???
-0 1358582615
+0 1358581943
 fn=_Exit
 0 7
 fn=_IO_default_finish
@@ -63,8 +63,8 @@ fn=__default_morecore
 0 7886770
 fn=__exp_finite
 0 9
-fn=__gnu_cxx::__promote_2<int, int, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type>::__type std::pow<int, int>(int, int)
-0 18
+fn=__fprintf_chk
+0 18973
 fn=__libc_alloca_cutoff
 0 5632
 fn=__libc_early_init
@@ -119,16 +119,12 @@ fn=fma
 0 6
 fn=fopen
 0 42
-fn=fprintf
-0 16896
 fn=free
 0 29548850
 fn=fstat
 0 7
 fn=fstatat
 0 8
-fn=fwrite
-0 72
 fn=getrandom
 0 9
 fn=getrlimit
@@ -140,7 +136,7 @@ fn=log2f
 fn=logf
 0 9
 fn=main
-0 5648597308
+0 2197367091
 fn=malloc
 0 50824037
 fn=matrixDestroyer(float**, int)
@@ -253,4 +249,4 @@ fn=wmemset
 0 38
 fn=write
 0 126
-summary: 43527662769
+summary: 40076433867
