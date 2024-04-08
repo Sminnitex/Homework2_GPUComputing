@@ -4,53 +4,79 @@ fl=???
 fn=(below main)
 0 83
 fn=???
-0 3946057
+0 1358583747
+fn=_Exit
+0 7
+fn=_IO_default_finish
+0 16
 fn=_IO_default_xsputn
-0 122
+0 382
 fn=_IO_do_write
-0 768
+0 901
 fn=_IO_doallocbuf
 0 26
+fn=_IO_file_close
+0 3
+fn=_IO_file_close_it
+0 62
 fn=_IO_file_doallocate
 0 51
+fn=_IO_file_finish
+0 13
+fn=_IO_file_fopen
+0 57
+fn=_IO_file_open
+0 33
 fn=_IO_file_overflow
-0 548
+0 518
 fn=_IO_file_stat
 0 3
 fn=_IO_file_write
-0 444
+0 518
 fn=_IO_file_xsputn
-0 47230
+0 81090
+fn=_IO_link_in
+0 110
 fn=_IO_setb
-0 24
+0 55
+fn=_IO_un_link
+0 8
+fn=_IO_unsave_markers
+0 10
 fn=__acos_finite
 0 8
 fn=__asin_finite
 0 8
 fn=__atan2_finite
 0 9
+fn=__call_tls_dtors
+0 12
+fn=__close_nocancel
+0 6
 fn=__ctype_init
 0 17
 fn=__cxa_atexit
 0 39
+fn=__cxa_finalize
+0 168
 fn=__default_morecore
-0 817
+0 7886770
 fn=__exp_finite
 0 9
 fn=__gnu_cxx::__promote_2<int, int, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type>::__type std::pow<int, int>(int, int)
 0 18
 fn=__libc_alloca_cutoff
-0 7865
+0 5632
 fn=__libc_early_init
 0 50
 fn=__log_finite
 0 9
 fn=__overflow
-0 198
+0 144
 fn=__pow_finite
 0 8
 fn=__printf_fp
-0 5005
+0 3584
 fn=__sigsetjmp
 0 22
 fn=__tunable_get_val
@@ -72,25 +98,35 @@ fn=bcmp
 fn=brk
 0 842
 fn=clock
-0 34344
+0 24576
 fn=clock_gettime
-0 15741
+0 11264
 fn=cos
 0 9
 fn=cosf
 0 9
+fn=exit
+0 8
 fn=exp2f
 0 9
 fn=expf
 0 9
-fn=findMin(int, int)
-0 9316745941
+fn=fclose
+0 74
 fn=fma
 0 6
+fn=fopen
+0 42
+fn=fprintf
+0 16896
+fn=free
+0 29548850
 fn=fstat
 0 7
 fn=fstatat
 0 8
+fn=fwrite
+0 72
 fn=getrandom
 0 9
 fn=getrlimit
@@ -102,11 +138,13 @@ fn=log2f
 fn=logf
 0 9
 fn=main
-0 18909313
+0 5648595772
 fn=malloc
-0 132276
+0 50824037
+fn=matrixDestroyer(float**, int)
+0 14191104
 fn=matrixInitialize(int, int)
-0 46152
+0 17743104
 fn=memchr
 0 25
 fn=memcpy
@@ -121,26 +159,30 @@ fn=memset
 0 26
 fn=mmap
 0 225
+fn=open
+0 37
 fn=pow
 0 19
 fn=powf
 0 9
-fn=printf
-0 27170
+fn=pthread_mutex_lock
+0 43
+fn=pthread_mutex_unlock
+0 34
 fn=rand
-0 5242880
+0 1567840000
 fn=random
-0 22020096
+0 6584928000
 fn=random_r
-0 33419132
+0 9993715616
 fn=randomf()
-0 10485760
+0 3135680000
 fn=rawmemchr
 0 25
 fn=rindex
 0 24
 fn=sbrk
-0 2224
+0 16650347
 fn=sin
 0 9
 fn=sincosf
@@ -189,8 +231,8 @@ fn=strtol
 0 5
 fn=time
 0 7
-fn=transposeBlockMatrix(float**, float**, int, int, int)
-0 26784283708
+fn=transposeMatrix(float**, float**, int, int)
+0 8156317440
 fn=wcschr
 0 48
 fn=wcscmp
@@ -208,5 +250,5 @@ fn=wmemcmp
 fn=wmemset
 0 38
 fn=write
-0 108
-summary: 36195384184
+0 126
+summary: 36582661549
