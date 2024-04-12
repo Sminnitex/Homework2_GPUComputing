@@ -1,18 +1,18 @@
-cmd: ./bin/assignment 10
+cmd: ./bin/assignment 11
 events: Ir
 fl=???
 fn=(below main)
 0 83
 fn=???
-0 1358583351
+0 4844795509
 fn=_Exit
 0 7
 fn=_IO_default_finish
 0 16
 fn=_IO_default_xsputn
-0 382
+0 448
 fn=_IO_do_write
-0 901
+0 965
 fn=_IO_doallocbuf
 0 26
 fn=_IO_file_close
@@ -28,13 +28,13 @@ fn=_IO_file_fopen
 fn=_IO_file_open
 0 33
 fn=_IO_file_overflow
-0 518
+0 541
 fn=_IO_file_stat
 0 3
 fn=_IO_file_write
-0 518
+0 555
 fn=_IO_file_xsputn
-0 81090
+0 81138
 fn=_IO_link_in
 0 110
 fn=_IO_setb
@@ -60,11 +60,11 @@ fn=__cxa_atexit
 fn=__cxa_finalize
 0 168
 fn=__default_morecore
-0 7886770
+0 14039738
 fn=__exp_finite
 0 9
-fn=__fprintf_chk
-0 18973
+fn=__gnu_cxx::__promote_2<int, int, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type, __gnu_cxx::__promote<int, std::__is_integer<int>::__value>::__type>::__type std::pow<int, int>(int, int)
+0 18
 fn=__libc_alloca_cutoff
 0 5632
 fn=__libc_early_init
@@ -96,7 +96,7 @@ fn=_setjmp
 fn=bcmp
 0 25
 fn=brk
-0 842
+0 3805
 fn=clock
 0 24576
 fn=clock_gettime
@@ -117,12 +117,16 @@ fn=fma
 0 6
 fn=fopen
 0 42
+fn=fprintf
+0 16896
 fn=free
-0 29548850
+0 68870450
 fn=fstat
 0 7
 fn=fstatat
 0 8
+fn=fwrite
+0 72
 fn=getrandom
 0 9
 fn=getrlimit
@@ -134,13 +138,13 @@ fn=log2f
 fn=logf
 0 9
 fn=main
-0 2197366575
+0 29822991164
 fn=malloc
-0 50824037
+0 118457189
 fn=matrixDestroyer(float**, int)
-0 14191104
+0 33065472
 fn=matrixInitialize(int, int)
-0 17743104
+0 41336064
 fn=memchr
 0 25
 fn=memcpy
@@ -154,7 +158,7 @@ fn=memrchr
 fn=memset
 0 26
 fn=mmap
-0 225
+0 2664
 fn=open
 0 37
 fn=pow
@@ -166,19 +170,19 @@ fn=pthread_mutex_lock
 fn=pthread_mutex_unlock
 0 34
 fn=rand
-0 1567840000
+0 8281347840
 fn=random
-0 6584928000
+0 34781660928
 fn=random_r
-0 9993715616
+0 52786913976
 fn=randomf()
-0 3135680000
+0 16562695680
 fn=rawmemchr
 0 25
 fn=rindex
 0 24
 fn=sbrk
-0 16650347
+0 29641259
 fn=sin
 0 9
 fn=sincosf
@@ -228,7 +232,7 @@ fn=strtol
 fn=time
 0 7
 fn=transposeMatrix(float**, float**, int, int)
-0 8156317440
+0 43071276800
 fn=wcschr
 0 48
 fn=wcscmp
@@ -246,5 +250,5 @@ fn=wmemcmp
 fn=wmemset
 0 38
 fn=write
-0 126
-summary: 33131433943
+0 135
+summary: 190457254480
