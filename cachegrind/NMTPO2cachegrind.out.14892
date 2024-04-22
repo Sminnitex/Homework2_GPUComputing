@@ -1,0 +1,253 @@
+desc: I1 cache:         32768 B, 64 B, 8-way associative
+desc: D1 cache:         32768 B, 64 B, 8-way associative
+desc: LL cache:         3145728 B, 64 B, 12-way associative
+cmd: ./bin/assignment 10
+events: Ir I1mr ILmr Dr D1mr DLmr Dw D1mw DLmw 
+fl=???
+fn=(below main)
+0 83 7 7 20 4 0 18 0 0
+fn=???
+0 2816612598 1298 1290 1048158493 2245770 1378382 126736927 2818069 2244278
+fn=_Exit
+0 7 1 1 1 0 0 0 0 0
+fn=_IO_default_finish
+0 16 2 2 6 0 0 1 0 0
+fn=_IO_default_xsputn
+0 448 9 9 74 0 0 60 7 7
+fn=_IO_do_write
+0 965 6 6 256 15 15 165 8 8
+fn=_IO_doallocbuf
+0 26 3 3 8 1 0 4 0 0
+fn=_IO_file_close
+0 3 1 1 1 0 0 0 0 0
+fn=_IO_file_close_it
+0 62 6 6 13 3 1 14 0 0
+fn=_IO_file_doallocate
+0 51 4 4 12 1 0 7 0 0
+fn=_IO_file_finish
+0 13 2 2 3 0 0 2 0 0
+fn=_IO_file_fopen
+0 57 5 5 13 1 1 9 0 0
+fn=_IO_file_open
+0 33 3 3 6 0 0 7 0 0
+fn=_IO_file_overflow
+0 541 7 7 134 0 0 78 8 8
+fn=_IO_file_stat
+0 3 1 1 1 0 0 0 0 0
+fn=_IO_file_write
+0 555 3 3 120 0 0 75 8 8
+fn=_IO_file_xsputn
+0 81138 5 5 18982 0 0 15376 0 0
+fn=_IO_link_in
+0 110 7 7 40 2 1 28 0 0
+fn=_IO_setb
+0 55 2 2 12 0 0 10 0 0
+fn=_IO_un_link
+0 8 1 1 3 0 0 0 0 0
+fn=_IO_unsave_markers
+0 10 2 2 4 0 0 1 0 0
+fn=__acos_finite
+0 8 2 2 4 0 0 0 0 0
+fn=__asin_finite
+0 8 1 1 4 0 0 0 0 0
+fn=__atan2_finite
+0 9 2 2 4 0 0 0 0 0
+fn=__call_tls_dtors
+0 12 2 2 5 0 0 2 0 0
+fn=__close_nocancel
+0 6 1 1 1 0 0 0 0 0
+fn=__ctype_init
+0 17 2 2 10 5 0 3 0 0
+fn=__cxa_atexit
+0 39 3 3 9 1 0 8 0 0
+fn=__cxa_finalize
+0 168 5 5 48 2 2 21 0 0
+fn=__default_morecore
+0 11203 2 2 2458 0 0 1229 0 0
+fn=__exp_finite
+0 9 2 2 4 0 0 0 0 0
+fn=__fprintf_chk
+0 18973 4 4 2052 0 0 8713 1536 1536
+fn=__libc_alloca_cutoff
+0 5632 2 2 1024 512 512 0 0 0
+fn=__libc_early_init
+0 50 5 5 10 2 0 10 3 3
+fn=__log_finite
+0 9 2 2 4 0 0 0 0 0
+fn=__overflow
+0 144 2 2 32 0 0 8 0 0
+fn=__pow_finite
+0 8 1 1 4 0 0 0 0 0
+fn=__printf_fp
+0 3584 1 1 1024 0 0 0 0 0
+fn=__sigsetjmp
+0 22 3 3 5 1 0 8 0 0
+fn=__tunable_get_val
+0 698 3 3 136 38 17 34 0 0
+fn=_dl_allocate_tls_init
+0 102 8 8 31 5 0 17 0 0
+fn=_dl_audit_preinit
+0 5 1 1 2 0 0 0 0 0
+fn=_dl_catch_error
+0 23 2 2 7 0 0 7 0 0
+fn=_dl_catch_exception
+0 210 3 3 42 0 0 78 3 3
+fn=_dl_debug_state
+0 4 1 1 2 0 0 0 0 0
+fn=_setjmp
+0 3 1 1 0 0 0 0 0 0
+fn=bcmp
+0 25 3 3 5 0 0 0 0 0
+fn=brk
+0 2129 1 1 552 97 97 347 0 0
+fn=clock
+0 24576 3 3 6144 512 512 2048 0 0
+fn=clock_gettime
+0 11264 2 2 3072 1951 1951 0 0 0
+fn=cos
+0 9 2 2 4 0 0 0 0 0
+fn=cosf
+0 9 2 2 4 0 0 0 0 0
+fn=exit
+0 8 2 2 1 0 0 2 0 0
+fn=exp2f
+0 9 2 2 4 0 0 0 0 0
+fn=expf
+0 9 2 2 4 0 0 0 0 0
+fn=fclose
+0 74 6 6 25 4 1 9 0 0
+fn=fma
+0 6 1 1 3 0 0 0 0 0
+fn=fopen
+0 42 4 4 6 0 0 10 1 1
+fn=free
+0 49171250 3 3 15734800 42486 35899 7867400 0 0
+fn=fstat
+0 7 1 1 0 0 0 0 0 0
+fn=fstatat
+0 8 2 2 1 0 0 0 0 0
+fn=getrandom
+0 9 2 2 2 0 0 0 0 0
+fn=getrlimit
+0 10 1 1 1 0 0 0 0 0
+fn=index
+0 22 2 2 4 0 0 0 0 0
+fn=log2f
+0 9 2 2 4 0 0 0 0 0
+fn=logf
+0 9 1 1 4 0 0 0 0 0
+fn=main
+0 5949692720 8 8 849392907 82755 42794 1698786831 53241989 52701397
+fn=malloc
+0 84574565 9 9 19668505 2049 2049 7867402 512 512
+fn=matrixDestroyer(float**, int)
+0 23609856 1 1 11799552 245805 145242 1972992 0 0
+fn=matrixInitialize(int, int)
+0 29516544 3 3 11804160 1204 496 3941376 244272 209894
+fn=memchr
+0 25 3 3 4 0 0 0 0 0
+fn=memcpy
+0 24 4 4 4 0 0 0 0 0
+fn=memmove
+0 48 4 4 8 0 0 0 0 0
+fn=mempcpy
+0 24 4 4 4 0 0 0 0 0
+fn=memrchr
+0 24 3 3 4 0 0 0 0 0
+fn=memset
+0 26 3 3 4 0 0 0 0 0
+fn=mmap
+0 1278 1 1 142 0 0 0 0 0
+fn=open
+0 37 4 4 8 0 0 7 0 0
+fn=pow
+0 19 3 3 5 1 1 3 0 0
+fn=powf
+0 9 1 1 4 0 0 0 0 0
+fn=pthread_mutex_lock
+0 43 7 7 12 0 0 4 0 0
+fn=pthread_mutex_unlock
+0 34 5 5 9 0 0 2 0 0
+fn=rand
+0 4246951680 1 1 849390336 0 0 849390336 0 0
+fn=random
+0 17837197056 3 3 6795122688 512 511 1698780672 0 0
+fn=random_r
+0 27070892000 2 2 6795122688 2048 2044 2548171008 0 0
+fn=randomf()
+0 8493903360 0 0 2548171008 512 3 1698780672 0 0
+fn=rawmemchr
+0 25 2 2 4 0 0 0 0 0
+fn=rindex
+0 24 2 2 4 0 0 0 0 0
+fn=sbrk
+0 24722 4 4 9629 1827 1827 3892 604 97
+fn=sin
+0 9 1 1 4 0 0 0 0 0
+fn=sincosf
+0 9 2 2 4 0 0 0 0 0
+fn=sinf
+0 9 1 1 4 0 0 0 0 0
+fn=srand
+0 16 2 2 5 1 1 2 0 0
+fn=srandom_r
+0 6830 5 5 1865 2 0 342 2 2
+fn=stpcpy
+0 20 2 2 4 0 0 0 0 0
+fn=stpncpy
+0 20 3 3 4 0 0 0 0 0
+fn=strcasecmp
+0 7 1 1 3 0 0 0 0 0
+fn=strcasecmp_l
+0 7 1 1 3 0 0 0 0 0
+fn=strcat
+0 20 2 2 4 0 0 0 0 0
+fn=strchrnul
+0 24 3 3 4 0 0 0 0 0
+fn=strcmp
+0 17 3 3 4 0 0 0 0 0
+fn=strcpy
+0 20 2 2 4 0 0 0 0 0
+fn=strcspn
+0 7 2 2 3 0 0 0 0 0
+fn=strlen
+0 24 2 2 4 0 0 0 0 0
+fn=strncasecmp
+0 7 1 1 3 0 0 0 0 0
+fn=strncasecmp_l
+0 7 2 2 3 0 0 0 0 0
+fn=strncmp
+0 17 3 3 4 0 0 0 0 0
+fn=strncpy
+0 20 2 2 4 0 0 0 0 0
+fn=strnlen
+0 48 3 3 8 1 0 0 0 0
+fn=strpbrk
+0 7 2 2 3 1 0 0 0 0
+fn=strspn
+0 7 1 1 3 0 0 0 0 0
+fn=strtol
+0 5 1 1 2 0 0 0 0 0
+fn=time
+0 7 2 2 3 2 0 0 0 0
+fn=transposeMatrix(float**, float**, int, int)
+0 22090052864 4 4 10195961600 151074440 53325917 850048512 848192816 52815902
+fn=wcschr
+0 48 3 3 8 0 0 0 0 0
+fn=wcscmp
+0 24 2 2 4 0 0 0 0 0
+fn=wcscpy
+0 7 1 1 3 0 0 0 0 0
+fn=wcslen
+0 22 2 2 4 0 0 0 0 0
+fn=wcsnlen
+0 22 3 3 4 0 0 0 0 0
+fn=wmemchr
+0 50 3 3 8 0 0 0 0 0
+fn=wmemcmp
+0 25 3 3 5 0 0 0 0 0
+fn=wmemset
+0 38 2 2 8 0 0 0 0 0
+fn=write
+0 135 2 2 30 0 0 0 0 0
+summary: 88692371754 1631 1623 29140375079 153702573 54938276 9492376789 904499838 107973656
