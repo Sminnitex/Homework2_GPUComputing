@@ -1,4 +1,4 @@
-#Section 1: problem description
+#   Section 1: problem description
 Our task is to perform a matrix transpose in C, basically the operation consists in invert rows and columns of our source Matrix. To formalize a little bit this concept, we can refer as the transpose of a matrix A as A^T; considering m the dimension of the rows of the matrix A, and n the columns (for brevity I will use the notation A[m][n] to refer to a generic matrix of dimensions m and n), the transpose operation will give us a new matrix A^T[n][m].
 
 ![alt text](https://github.com/Sminnitex/Homework1_GPUComputing/blob/master/figures/Important-Questions-for-Class-10-Maths-Chapter-8-Introduction-to-Trigonometry-1.png?raw=true)
@@ -12,7 +12,7 @@ The base algorithm where we will perform the transpose simply performing over tw
 
 In the block transpose the function we will need to pass a new parameter, block size, and the operation will be divided in small blocks over the whole size of the matrix using 4 nested loops. To perform a fair comparison we will initialize our matrices with random float values and compare the time only of the transpose operation. At the end of each time check we will increase the rows and columns dimension of 1 unit for all the 500 iteration of our for loop.
 
-#Section 2: experimental results
+#   Section 2: experimental results
 The code will be performed on a specific hardware, my laptop which is an Acer Aspire E5 produced in 2017.
 
 The laptop is equipped with an Intel Core i5-7200U CPU. This CPU has 2 cores and 4 threads, 3MB of cache and 34 GB/s of max bandwidth. Then the PC is equipped with 12GB of RAM, and Windows 11 as OS (even if for convenience the code will run on WSL). To analyze the cache behavior Valgrind with the tool cache-grind will be used, so let's take a look to the plot of the time to perform the transpose with the normal and block technique, changing the dimension of the matrices:
