@@ -28,8 +28,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Michele/source/repos/GPU",
-      "program": "c:/Users/Michele/source/repos/GPU/build/Debug/outDebug",
+      "cwd": "c:/Users/Michele/source/repos/Homework1_GPUComputing",
+      "program": "c:/Users/Michele/source/repos/Homework1_GPUComputing/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

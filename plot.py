@@ -52,14 +52,14 @@ print("Max:", max_val)
 print("Sum: ", sum)
 
 fig, axes = plt.subplots(2, 1, figsize=(10, 8))
-bandwidth1 = ((12455856960 + 1865718880) / np.power(10, 9)) / 212.822617
-bandwidth2 = ((2612008032 + 902831200) / np.power(10, 9)) / 71.164095
-bandwidth3 = ((1809174848 + 902870848) / np.power(10, 9)) / 69.479736
-bandwidth4 = ((1805653696 + 902787456) / np.power(10, 9)) / 60.077699
-bandwidth5 = ((10195961600 + 850048512) / np.power(10, 9)) / 34.652168
-bandwidth6 = ((2548171520 + 849390336) / np.power(10, 9)) / 57.886146999999994
-bandwidth7 = ((849390336 + 849390336) / np.power(10, 9)) / 74.12973099999999
-bandwidth8 = ((849390336 + 849390336) / np.power(10, 9)) / 75.73757499999999
+bandwidth1 = ((19879305848 + 8695828316) / np.power(10, 9)) / 212.822617
+bandwidth2 = ((19879305848 + 8695828316) / np.power(10, 9)) / 71.164095
+bandwidth3 = ((19879305848 + 8695828316) / np.power(10, 9)) / 69.479736
+bandwidth4 = ((19879305848 + 8695828316) / np.power(10, 9)) / 60.077699
+bandwidth5 = ((19773088714 + 8642431561) / np.power(10, 9)) / 34.652168
+bandwidth6 = ((19773088714 + 8642431561) / np.power(10, 9)) / 57.886146999999994
+bandwidth7 = ((19773088714 + 8642431561) / np.power(10, 9)) / 74.12973099999999
+bandwidth8 = ((19773088714 + 8642431561) / np.power(10, 9)) / 75.73757499999999
 firstplot = [bandwidth1, bandwidth2, bandwidth3, bandwidth4]
 secondplot = [bandwidth5, bandwidth6, bandwidth7, bandwidth8]
 
