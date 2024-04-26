@@ -1,5 +1,5 @@
 CC = c++
-LIB_HOME = /mnt/c/Users/Michele/source/repos/GPU
+LIB_HOME = /home/michele/Homework1_GPUComputing
 LIBS = -L$(LIB_HOME)/lib64
 INCLUDE = -Isrc
 OPT = -std=c++14 -O0

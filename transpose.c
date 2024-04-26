@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
     int block = number / 64;
     //printf("block size = %d \n", block);
 
-    FILE *csvTime = fopen("output/timeN0.csv", "w");
+    FILE *csvTime = fopen("output/timeB0.csv", "w");
     if (csvTime == NULL) {
         printf("Error opening file!\n");
         return 1;
@@ -43,18 +43,18 @@ int main(int argc, char *argv[]){
             return 1; // ERROR: malloc did not work
         }
         //Matrix block transpose
-        //clock_t begin = clock();
-        //transposeBlockMatrix(matrix, transposeBlock, number, number, block);
-        //clock_t end = clock();
-        //time = (double) (end-begin) / CLOCKS_PER_SEC;
-        //fprintf(csvTime, "%f,%ld\n", time, number); 
+        clock_t begin = clock();
+        transposeBlockMatrix(matrix, transposeBlock, number, number, block);
+        clock_t end = clock();
+        time = (double) (end-begin) / CLOCKS_PER_SEC;
+        fprintf(csvTime, "%f,%ld\n", time, number); 
 
         //Matrix normal transpose
-        clock_t begin2 = clock();
-        transposeMatrix(matrix, transpose, number, number);
-        clock_t end2 = clock();
-        time2 = (double) (end2-begin2) / CLOCKS_PER_SEC;
-        fprintf(csvTime, "%f,%ld\n", time2, number); 
+        //clock_t begin2 = clock();
+        //transposeMatrix(matrix, transpose, number, number);
+        //clock_t end2 = clock();
+        //time2 = (double) (end2-begin2) / CLOCKS_PER_SEC;
+        //fprintf(csvTime, "%f,%ld\n", time2, number); 
 
         //Lines for debug purposes
         //printMatrix(matrix, number, number);
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
         matrixDestroyer(matrix, number);
         matrixDestroyer(transposeBlock, number);
         matrixDestroyer(transpose, number);
-        number = number - 1;
+        number = number + 1;
     }      
 
     fclose(csvTime);
