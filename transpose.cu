@@ -7,7 +7,11 @@
 #include "./include/helper_cuda.h"
 #include <cuda_runtime.h>
 
-#define dtype float
+#define NDEVICE 3
+#define TIMER_DEF     struct timeval temp_1, temp_2
+#define TIMER_START   gettimeofday(&temp_1, (struct timezone*)0)
+#define TIMER_STOP    gettimeofday(&temp_2, (struct timezone*)0)
+#define TIMER_ELAPSED ((temp_2.tv_sec-temp_1.tv_sec)+(temp_2.tv_usec-temp_1.tv_usec)/1000000.0)
 
 int main(int argc, char *argv[]){
 
@@ -16,6 +20,8 @@ int main(int argc, char *argv[]){
     int power = strtol(argv[1], NULL, 10);
     long number = pow(2, power);
     int block = number / 64;
+    int gridsize = 1;
+    int blocksize = 1;
     //printf("block size = %d \n", block);
 
     FILE *file = fopen("deviceProperties.txt", "r");
@@ -38,11 +44,12 @@ int main(int argc, char *argv[]){
     fprintf(csvTime, "Time,Dimensions\n");
 
     long long tries = 1 << 9;
-    double time, time2;
+    TIMER_DEF;
+    float times[NDEVICE];
 
     //tries loop
     for (int count = 0; count < tries; count++){
-        float **matrix = matrixInitialize(number, number);
+        dtype **matrix = matrixInitialize(number, number);
 
         //Assign random values to matrices
         for (int i = 0; i < number; i++){
@@ -51,26 +58,26 @@ int main(int argc, char *argv[]){
             }
         }
         
-        float **transposeBlock = matrixInitialize(number, number);
-        float **transpose = matrixInitialize(number, number);
+        dtype **transposeBlock = matrixInitialize(number, number);
+        dtype **transpose = matrixInitialize(number, number);
 
         //check validity
         if (matrix == NULL || transposeBlock == NULL || transpose == NULL){
             return 1; // ERROR: malloc did not work
         }
         //Matrix block transpose
-        clock_t begin = clock();
-        transposeBlockMatrix(matrix, transposeBlock, number, number, block);
-        clock_t end = clock();
-        time = (double) (end-begin) / CLOCKS_PER_SEC;
-        fprintf(csvTime, "%f,%ld\n", time, number); 
+        //TIMER_START;
+        //transposeMyBlockMatrix<<<gridsize, blocksize>>>(matrix, transposeBlock, number, number, block);
+        //TIMER_STOP;
+        //times[1] = TIMER_ELAPSED;
+        //fprintf(csvTime, "%f,%ld\n", times[1], number); 
 
         //Matrix normal transpose
-        //clock_t begin2 = clock();
-        //transposeMatrix(matrix, transpose, number, number);
-        //clock_t end2 = clock();
-        //time2 = (double) (end2-begin2) / CLOCKS_PER_SEC;
-        //fprintf(csvTime, "%f,%ld\n", time2, number); 
+        TIMER_START;
+        transposeMatrix<<<gridsize, blocksize>>>(matrix, transpose, number, number);
+        TIMER_STOP;
+        times[2] = TIMER_ELAPSED;
+        fprintf(csvTime, "%f,%ld\n", times[2], number); 
 
         //Lines for debug purposes
         //printMatrix(matrix, number, number);

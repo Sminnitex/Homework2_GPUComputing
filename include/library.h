@@ -5,15 +5,18 @@
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
+#include <cuda_runtime.h>
 
-float randomf(){
-    return (float) rand() / (float) RAND_MAX;   
+#define dtype float
+
+dtype randomf(){
+    return (dtype) rand() / (dtype) RAND_MAX;   
 }
 
-float **matrixInitialize(int rows, int cols){
-    float **matrix = (float**)malloc(rows * sizeof(float*));
+dtype **matrixInitialize(int rows, int cols){
+    dtype **matrix = (dtype**)malloc(rows * sizeof(dtype*));
     for (int i = 0; i < rows; i++){
-        matrix[i] = (float*)malloc(cols * sizeof(float));
+        matrix[i] = (dtype*)malloc(cols * sizeof(dtype));
     }
 
     if (matrix == NULL) {
@@ -24,14 +27,14 @@ float **matrixInitialize(int rows, int cols){
     return matrix;
 }
 
-void matrixDestroyer(float **matrix, int rows){
+void matrixDestroyer(dtype **matrix, int rows){
     for (int i = 0; i < rows; i++){
         free(matrix[i]);
     }
     free(matrix);
 }
 
-void printMatrix(float **matrix, int rows, int cols){
+void printMatrix(dtype **matrix, int rows, int cols){
     for (int i = 0; i < rows; i++){
         for (int j = 0; j < cols; j++){
             printf("%f ", matrix[i][j]);
@@ -41,11 +44,11 @@ void printMatrix(float **matrix, int rows, int cols){
     printf("\n");
 }
 
-int findMin(int num1, int num2){
+__device__ int findsMin(int num1, int num2){
     return (num1 > num2) ? num2 : num1;
 }
 
-void transposeMatrix (float **matrix, float **transpose, int rows, int cols){
+__global__ void transposeMatrix (dtype **matrix, dtype **transpose, int rows, int cols){
     for (int j = 0; j < cols; j++) {
         for (int i = 0; i < rows; i++){
             transpose[i][j] = matrix[j][i];
@@ -53,11 +56,11 @@ void transposeMatrix (float **matrix, float **transpose, int rows, int cols){
     }
 }
 
-void transposeBlockMatrix (float **matrix, float **transpose, int rows, int cols, int block){
+__global__ void transposeMyBlockMatrix (dtype **matrix, dtype **transpose, int rows, int cols, int block){
     for (int jj = 0; jj < cols; jj += block) {
             for (int ii = 0; ii < rows; ii+=block) {
-                for (int j = jj; j < findMin(jj + block, cols); j++) {
-                    for (int i = ii; i < findMin(ii + block, rows); i++){
+                for (int j = jj; j < findsMin(jj + block, cols); j++) {
+                    for (int i = ii; i < findsMin(ii + block, rows); i++){
                         transpose[i][j] = matrix[j][i];
                     }
                 }
