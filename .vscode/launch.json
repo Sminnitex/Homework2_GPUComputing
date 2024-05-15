@@ -2,34 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "(gdb) Associa",
-      "type": "cppdbg",
-      "request": "attach",
-      "program": "immettere il nome del programma, ad esempio ${workspaceFolder}/a.exe",
-      "MIMode": "gdb",
-      "miDebuggerPath": "/path/to/gdb",
-      "setupCommands": [
-        {
-          "description": "Abilita la riformattazione per gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        },
-        {
-          "description": "Imposta Versione Disassembly su Intel",
-          "text": "-gdb-set disassembly-flavor intel",
-          "ignoreFailures": true
-        }
-      ]
-    },
-    {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "c:/Users/Michele/source/repos/Homework1_GPUComputing",
-      "program": "c:/Users/Michele/source/repos/Homework1_GPUComputing/build/Debug/outDebug",
+      "externalConsole": false,
+      "cwd": "/home/michele/GPU",
+      "program": "/home/michele/GPU/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
