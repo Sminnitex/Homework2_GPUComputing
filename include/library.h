@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <cuda_runtime.h>
+#include "./helper_cuda.h"
 
 #define dtype float
 
@@ -13,60 +14,74 @@ dtype randomf(){
     return (dtype) rand() / (dtype) RAND_MAX;   
 }
 
-dtype **matrixInitialize(int rows, int cols){
-    dtype **matrix = (dtype**)malloc(rows * sizeof(dtype*));
-    for (int i = 0; i < rows; i++){
-        matrix[i] = (dtype*)malloc(cols * sizeof(dtype));
-    }
-
-    if (matrix == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
-
-    return matrix;
+void matrixInitialize(int rows, int cols, dtype **matrix, dtype **transpose, dtype **transposeBlock) {
+    checkCudaErrors(cudaHostAlloc(matrix, sizeof(dtype) * rows * cols, cudaHostAllocDefault));
+    checkCudaErrors(cudaHostAlloc(transpose, sizeof(dtype) * rows * cols, cudaHostAllocDefault));
+    checkCudaErrors(cudaHostAlloc(transposeBlock, sizeof(dtype) * rows * cols, cudaHostAllocDefault));
 }
 
-void matrixDestroyer(dtype **matrix, int rows){
-    for (int i = 0; i < rows; i++){
-        free(matrix[i]);
-    }
-    free(matrix);
+
+void matrixDestroyer(dtype *matrix, dtype *transpose, dtype *transposeBlock){
+    checkCudaErrors(cudaFreeHost(matrix));
+    checkCudaErrors(cudaFreeHost(transpose));
+    checkCudaErrors(cudaFreeHost(transposeBlock));
 }
 
-void printMatrix(dtype **matrix, int rows, int cols){
-    for (int i = 0; i < rows; i++){
-        for (int j = 0; j < cols; j++){
-            printf("%f ", matrix[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
+void printMatrix(dtype *matrix, int rows, int cols, char ST[56]){
+    int i, j;  \
+      printf("%s:\n", ( ST ));  \
+      for (i=0; i< ( rows ); i++) {  \
+        printf("\t");  \
+        for (j=0; j< ( cols ); j++)  \
+          printf("%6.3f ", matrix[i*( cols ) + j]);  \
+        printf("\n");  \
+      }  \
+      printf("\n\n");  \
 }
 
 __device__ int findsMin(int num1, int num2){
     return (num1 > num2) ? num2 : num1;
 }
 
-__global__ void transposeMatrix (dtype **matrix, dtype **transpose, int rows, int cols){
-    for (int j = 0; j < cols; j++) {
-        for (int i = 0; i < rows; i++){
-            transpose[i][j] = matrix[j][i];
-         }
-    }
+__global__ void dummyKernel() {}
+
+__global__ void transposeMatrix (dtype *matrix, dtype *transpose, int rows, int cols){
+    const uint x = blockIdx.x * blockDim.x + threadIdx.x;
+    const uint y = blockIdx.y * blockDim.y + threadIdx.y; 
+
+    extern __shared__ dtype sharedData[];
+
+    for (int i = 0; i < rows * cols; i ++) {
+      sharedData[(threadIdx.y + i) * blockDim.x + threadIdx.x] = matrix[(y + i) * cols + x];
+    }   
+
+    __syncthreads();
+
+    for (int i = 0; i < rows * cols; i ++) {
+      transpose[x * rows + (y + i)] = sharedData[(threadIdx.y + i) * blockDim.x + threadIdx.x];
+    }   
 }
 
-__global__ void transposeMyBlockMatrix (dtype **matrix, dtype **transpose, int rows, int cols, int block){
-    for (int jj = 0; jj < cols; jj += block) {
-            for (int ii = 0; ii < rows; ii+=block) {
-                for (int j = jj; j < findsMin(jj + block, cols); j++) {
-                    for (int i = ii; i < findsMin(ii + block, rows); i++){
-                        transpose[i][j] = matrix[j][i];
-                    }
-                }
-            }
+__global__ void transposeMyBlockMatrix (dtype *matrix, dtype *transpose, int rows, int cols, int block){
+    const uint global_x = blockIdx.x * block * blockDim.x + threadIdx.x;
+    const uint global_y = blockIdx.y * block * blockDim.y + threadIdx.y;
+
+    const uint shared_x = threadIdx.x;
+    const uint shared_y = threadIdx.y;
+    extern __shared__ dtype tile[];
+
+    if (global_x < cols && global_y < rows) {
+        tile[shared_y * block + shared_x] = matrix[global_y * cols + global_x];
+    }
+
+    __syncthreads();
+
+    const uint transposed_x = blockIdx.y * block * blockDim.y + threadIdx.x;
+    const uint transposed_y = blockIdx.x * block * blockDim.x + threadIdx.y;
+
+    if (transposed_x < rows && transposed_y < cols) {
+        transpose[transposed_y * rows + transposed_x] = tile[shared_x * block + shared_y];
     }
 }
-
 
 #endif  

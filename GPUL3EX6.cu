@@ -21,13 +21,13 @@
 
 #define STR(s) #s
 #define XSTR(s) STR(s)
-#define dtype float
+#define dtype double
 
 // #include "../solutions/lab2_sol.cu"
 //#define RUN_SOLUTIONS
 
-#define BLK_SIZE 32
-#define GRD_SIZE 2
+#define BLK_SIZE 128
+#define GRD_SIZE 14
 
 __device__ uint get_smid(void) {
 
