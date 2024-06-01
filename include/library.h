@@ -9,22 +9,24 @@
 #include "./helper_cuda.h"
 
 #define dtype float
+#define TILE_DIM 32
+#define BLOCK_ROWS 8
 
 dtype randomf(){
     return (dtype) rand() / (dtype) RAND_MAX;   
 }
 
-void matrixInitialize(int rows, int cols, dtype **matrix, dtype **transpose, dtype **transposeBlock) {
-    checkCudaErrors(cudaHostAlloc(matrix, sizeof(dtype) * rows * cols, cudaHostAllocDefault));
-    checkCudaErrors(cudaHostAlloc(transpose, sizeof(dtype) * rows * cols, cudaHostAllocDefault));
-    checkCudaErrors(cudaHostAlloc(transposeBlock, sizeof(dtype) * rows * cols, cudaHostAllocDefault));
+void matrixInitialize(int rows, int cols, dtype **matrix, dtype **transpose, dtype **transposeShared) {
+    checkCudaErrors(cudaMallocManaged(matrix, sizeof(dtype) * rows * cols));
+    checkCudaErrors(cudaMallocManaged(transpose, sizeof(dtype) * rows * cols));
+    checkCudaErrors(cudaMallocManaged(transposeShared, sizeof(dtype) * rows * cols));
 }
 
 
-void matrixDestroyer(dtype *matrix, dtype *transpose, dtype *transposeBlock){
-    checkCudaErrors(cudaFreeHost(matrix));
-    checkCudaErrors(cudaFreeHost(transpose));
-    checkCudaErrors(cudaFreeHost(transposeBlock));
+void matrixDestroyer(dtype *matrix, dtype *transpose, dtype *transposeShared){
+    checkCudaErrors(cudaFree(matrix));
+    checkCudaErrors(cudaFree(transpose));
+    checkCudaErrors(cudaFree(transposeShared));
 }
 
 void printMatrix(dtype *matrix, int rows, int cols, char ST[56]){
@@ -45,42 +47,34 @@ __device__ int findsMin(int num1, int num2){
 
 __global__ void dummyKernel() {}
 
-__global__ void transposeMatrix (dtype *matrix, dtype *transpose, int rows, int cols){
-    const uint x = blockIdx.x * blockDim.x + threadIdx.x;
-    const uint y = blockIdx.y * blockDim.y + threadIdx.y; 
-
-    extern __shared__ dtype sharedData[];
-
-    for (int i = 0; i < rows * cols; i ++) {
-      sharedData[(threadIdx.y + i) * blockDim.x + threadIdx.x] = matrix[(y + i) * cols + x];
-    }   
-
-    __syncthreads();
-
-    for (int i = 0; i < rows * cols; i ++) {
-      transpose[x * rows + (y + i)] = sharedData[(threadIdx.y + i) * blockDim.x + threadIdx.x];
-    }   
+__global__ void transposeGlobalMatrix (dtype *matrix, dtype *transpose, int rows, int cols){
+    const uint x = blockIdx.x * TILE_DIM + threadIdx.x;
+    const uint y = blockIdx.y * TILE_DIM + threadIdx.y; 
+    
+     for (int i = 0; i < TILE_DIM; i+=BLOCK_ROWS){
+        if ((x < cols) && (y + i < rows)) {
+            transpose[(x * rows) + (y + i)] = matrix[(y + i) * cols + x];
+        }
+     }
 }
 
-__global__ void transposeMyBlockMatrix (dtype *matrix, dtype *transpose, int rows, int cols, int block){
-    const uint global_x = blockIdx.x * block * blockDim.x + threadIdx.x;
-    const uint global_y = blockIdx.y * block * blockDim.y + threadIdx.y;
+__global__ void transposeSharedMatrix (dtype *matrix, dtype *transpose, int rows, int cols){
+    __shared__ float tile[TILE_DIM][TILE_DIM];
+    int x = blockIdx.x * TILE_DIM + threadIdx.x;
+    int y = blockIdx.y * TILE_DIM + threadIdx.y;
 
-    const uint shared_x = threadIdx.x;
-    const uint shared_y = threadIdx.y;
-    extern __shared__ dtype tile[];
+    int index_in = x + y* rows;
+    x = blockIdx.y * TILE_DIM + threadIdx.x;
+    y = blockIdx.x * TILE_DIM + threadIdx.y;
+    int index_out = x + y * cols;
 
-    if (global_x < cols && global_y < rows) {
-        tile[shared_y * block + shared_x] = matrix[global_y * cols + global_x];
+    for (int i = 0; i < TILE_DIM; i += BLOCK_ROWS) {
+        tile[threadIdx.y + i][threadIdx.x] = matrix[index_in + i * rows];
     }
-
     __syncthreads();
 
-    const uint transposed_x = blockIdx.y * block * blockDim.y + threadIdx.x;
-    const uint transposed_y = blockIdx.x * block * blockDim.x + threadIdx.y;
-
-    if (transposed_x < rows && transposed_y < cols) {
-        transpose[transposed_y * rows + transposed_x] = tile[shared_x * block + shared_y];
+    for (int i=0; i<TILE_DIM; i+=BLOCK_ROWS) {
+        transpose[index_out + i * cols] = tile[threadIdx.x][threadIdx.y+i];
     }
 }
 

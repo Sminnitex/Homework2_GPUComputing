@@ -19,13 +19,11 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
     int power = strtol(argv[1], NULL, 10);
     long number = pow(2, power);
-    int block = number / 64;
-    int gridsize = 28;
-    int blocksize = 64;
+    int gridsize = 56;
+    int blocksize = 1024;
 
     printf("==============================================================\n");
     printf("STATS OF MY PROBLEM\n");
-    printf("block for block transpose = %d \n", block);
     printf("block size = %d \n", blocksize);
     printf("grid size = %d \n", gridsize);
     dim3 block_size(blocksize, blocksize, 1);
@@ -33,8 +31,15 @@ int main(int argc, char *argv[]) {
     printf("%d: block_size = (%d, %d), grid_size = (%d, %d)\n", __LINE__, block_size.x, block_size.y, grid_size.x, grid_size.y);
     int sharedMemSize = sizeof(dtype) * block_size.x * block_size.y * 2;
 
-    //Print device properties
-    FILE *file = fopen("deviceProperties.txt", "r");
+    //Print device properties for my laptop
+    // FILE *file = fopen("deviceProperties.txt", "r");
+    // if (file == NULL) {
+    //     printf("Error opening file!\n");
+    //     return 1;
+    // }
+
+    //Print device properties for unitn cluster
+    FILE *file = fopen("warp.txt", "r");
     if (file == NULL) {
         printf("Error opening file!\n");
         return 1;
@@ -48,19 +53,19 @@ int main(int argc, char *argv[]) {
     }
     fclose(file);
 
-    //Prepare our output files
+    //Prepare our output files changing block and grid size
     FILE *csvtime[NFILES];
     char filename[56];
 
     for (int i = 0; i < NFILES / 2; i++) {
-        sprintf(filename, "output/timeB%d.csv", i);
+        sprintf(filename, "output/timeShared%d.csv", i);
         csvtime[i] = fopen(filename, "w");
         if (csvtime[i] == NULL) {
             printf("Error opening file!\n");
             return 1;
         }
 
-        sprintf(filename, "output/timeN%d.csv", i);
+        sprintf(filename, "output/timeGlobal%d.csv", i);
         csvtime[i + NFILES / 2] = fopen(filename, "w");
         if (csvtime[i + NFILES / 2] == NULL) {
             printf("Error opening file!\n");
@@ -73,8 +78,8 @@ int main(int argc, char *argv[]) {
     }
     
     //Prepare our iterations and preload kernel
-    dummyKernel<<<1, 1>>>();
-    long long tries = 1 << 0;
+    dummyKernel<<<gridsize, blocksize>>>();
+    long long tries = 1 << 10;
     TIMER_DEF;
     float times[NDEVICE] = {0};
 
@@ -82,46 +87,55 @@ int main(int argc, char *argv[]) {
     for (int count = 0; count < tries; count++) {
         cudaStream_t stream;
         checkCudaErrors(cudaStreamCreate(&stream));
-        dtype *matrix = NULL, *transpose = NULL, *transposeBlock = NULL;
-        matrixInitialize(number, number, &matrix, &transpose, &transposeBlock);
+        dtype *matrix = NULL, *transpose = NULL, *transposeShared = NULL;
+        matrixInitialize(number, number, &matrix, &transpose, &transposeShared);
+
+        //Check validity
+        if (matrix == NULL || transposeShared == NULL || transpose == NULL) {
+            printf("Memory allocation failed\n");
+            return 1;
+        }
 
         //Assign random values to matrices
         for (int i = 0; i < number * number; i++) {
             matrix[i] = randomf();
         }
-
-        //Check validity
-        if (matrix == NULL || transposeBlock == NULL || transpose == NULL) {
-            printf("Memory allocation failed\n");
-            return 1;
-        }
-
+   
+        blocksize = 1024;
+        gridsize = 56;
         //Matrix block transpose
         for (int k = 0; k < NFILES / 2; k++) {
             TIMER_START;
-            transposeMyBlockMatrix<<<gridsize, blocksize, sharedMemSize, stream>>>(matrix, transposeBlock, number, number, block);
+            transposeSharedMatrix<<<gridsize, blocksize, sharedMemSize, stream>>>(matrix, transposeShared, number, number);
             checkCudaErrors(cudaGetLastError());
             TIMER_STOP;
             times[0] += TIMER_ELAPSED;
-            fprintf(csvtime[k], "%f,%ld\n", TIMER_ELAPSED, number); 
+            fprintf(csvtime[k], "%f,%ld\n", TIMER_ELAPSED, number);
+            blocksize = blocksize / 2;
+            gridsize = gridsize / 2;
         }
         
+        blocksize = 1024;
+        gridsize = 56;
         //Matrix normal transpose
         for (int k = 0; k < NFILES / 2; k++) {
             TIMER_START;
-            transposeMatrix<<<gridsize, blocksize, sharedMemSize, stream>>>(matrix, transpose, number, number);
+            transposeGlobalMatrix<<<gridsize, blocksize, sharedMemSize, stream>>>(matrix, transpose, number, number);
             checkCudaErrors(cudaGetLastError());
             TIMER_STOP;
             times[1] += TIMER_ELAPSED;
             fprintf(csvtime[k + NFILES / 2], "%f,%ld\n", TIMER_ELAPSED, number); 
+            blocksize = blocksize / 2;
+            gridsize = gridsize / 2;
         }
 
         //Lines for debug purposes
-        printMatrix(matrix, number, number, "Matrix");
-        printMatrix(transposeBlock, number, number, "transpose block");
-        printMatrix(transpose, number, number, "transpose");
+        //printMatrix(matrix, number, number, "Matrix");
+        //printMatrix(transpose, number, number, "transpose with global memory");
+        //printMatrix(transposeShared, number, number, "transpose with shared memory");
+        
 
-        matrixDestroyer(matrix, transpose, transposeBlock);
+        matrixDestroyer(matrix, transpose, transposeShared);
         checkCudaErrors(cudaStreamDestroy(stream));
         number = number + 1;
     }      
@@ -132,10 +146,8 @@ int main(int argc, char *argv[]) {
 
     printf("==============================================================\n");
     printf("STATS\n");
-    printf("Block Matrix Transpose Effective Bandwidth(GB/s): %f\n", (3 * number * number * sizeof(dtype)) / (1e9 * times[0]));
-    printf("Block Matrix Transpose Computational Throughput (GFLOP/s): %f\n", (2 * number * number / sizeof(dtype)) / (1e9 * times[0]));
-    printf("Normal Matrix Transpose Effective Bandwidth(GB/s): %f\n", (3 * number * number * sizeof(dtype)) / (1e9 * times[1]));
-    printf("Normal Matrix Transpose Computational Throughput (GFLOP/s): %f\n", (2 * number * number / sizeof(dtype)) / (1e9 * times[1]));
-
+    printf("Global Matrix Transpose Effective Bandwidth(GB/s): %f\n", (2 * number * number * sizeof(dtype)) / (1e9 * times[1]));
+    printf("Shared Matrix Transpose Effective Bandwidth(GB/s): %f\n", (2 * number * number * sizeof(dtype)) / (1e9 * times[0]));
+    
     return 0;
 }
