@@ -9,7 +9,7 @@
 #include "./helper_cuda.h"
 
 #define dtype float
-#define TILE_DIM 32
+#define TILE_DIM 16
 #define BLOCK_ROWS 8
 
 dtype randomf(){
@@ -59,22 +59,28 @@ __global__ void transposeGlobalMatrix (dtype *matrix, dtype *transpose, int rows
 }
 
 __global__ void transposeSharedMatrix (dtype *matrix, dtype *transpose, int rows, int cols){
-    __shared__ float tile[TILE_DIM][TILE_DIM];
+   __shared__ dtype tile[TILE_DIM][TILE_DIM + 1]; //Add padding to avoid bank conflicts
+
     int x = blockIdx.x * TILE_DIM + threadIdx.x;
     int y = blockIdx.y * TILE_DIM + threadIdx.y;
-
-    int index_in = x + y* rows;
-    x = blockIdx.y * TILE_DIM + threadIdx.x;
-    y = blockIdx.x * TILE_DIM + threadIdx.y;
-    int index_out = x + y * cols;
+    int index_in = x + y * cols;
 
     for (int i = 0; i < TILE_DIM; i += BLOCK_ROWS) {
-        tile[threadIdx.y + i][threadIdx.x] = matrix[index_in + i * rows];
+        if (x < cols && (y + i) < rows) {
+            tile[threadIdx.y + i][threadIdx.x] = matrix[index_in + i * cols];
+        }
     }
+
     __syncthreads();
 
-    for (int i=0; i<TILE_DIM; i+=BLOCK_ROWS) {
-        transpose[index_out + i * cols] = tile[threadIdx.x][threadIdx.y+i];
+    x = blockIdx.y * TILE_DIM + threadIdx.x;
+    y = blockIdx.x * TILE_DIM + threadIdx.y;
+    int index_out = x + y * rows;
+
+    for (int i = 0; i < TILE_DIM; i += BLOCK_ROWS) {
+        if (x < rows && (y + i) < cols) {
+            transpose[index_out + i * rows] = tile[threadIdx.x][threadIdx.y + i];
+        }
     }
 }
 

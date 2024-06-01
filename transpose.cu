@@ -19,15 +19,15 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
     int power = strtol(argv[1], NULL, 10);
     long number = pow(2, power);
-    int gridsize = 56;
-    int blocksize = 1024;
+    int blocksize = 32;
+    int gridsize = (number + blocksize - 1) / 32;
 
     printf("==============================================================\n");
     printf("STATS OF MY PROBLEM\n");
     printf("block size = %d \n", blocksize);
     printf("grid size = %d \n", gridsize);
     dim3 block_size(blocksize, blocksize, 1);
-    dim3 grid_size(blocksize, blocksize, 1);
+    dim3 grid_size(gridsize, gridsize, 1);
     printf("%d: block_size = (%d, %d), grid_size = (%d, %d)\n", __LINE__, block_size.x, block_size.y, grid_size.x, grid_size.y);
     int sharedMemSize = sizeof(dtype) * block_size.x * block_size.y * 2;
 
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
     }
     
     //Prepare our iterations and preload kernel
-    dummyKernel<<<gridsize, blocksize>>>();
+    dummyKernel<<<grid_size, block_size>>>();
     long long tries = 1 << 10;
     TIMER_DEF;
     float times[NDEVICE] = {0};
@@ -101,32 +101,42 @@ int main(int argc, char *argv[]) {
             matrix[i] = randomf();
         }
    
-        blocksize = 1024;
-        gridsize = 56;
+        blocksize = 32;
+        gridsize = (number + blocksize - 1) / 32;
+        block_size = dim3(blocksize, blocksize, 1);
+        grid_size = dim3(gridsize, gridsize, 1);
         //Matrix block transpose
         for (int k = 0; k < NFILES / 2; k++) {
             TIMER_START;
-            transposeSharedMatrix<<<gridsize, blocksize, sharedMemSize, stream>>>(matrix, transposeShared, number, number);
+            transposeSharedMatrix<<<grid_size, block_size, sharedMemSize, stream>>>(matrix, transposeShared, number, number);
             checkCudaErrors(cudaGetLastError());
+            checkCudaErrors(cudaDeviceSynchronize());
             TIMER_STOP;
             times[0] += TIMER_ELAPSED;
             fprintf(csvtime[k], "%f,%ld\n", TIMER_ELAPSED, number);
             blocksize = blocksize / 2;
-            gridsize = gridsize / 2;
+            gridsize = (number + blocksize - 1) / 32;
+            block_size = dim3(blocksize, blocksize, 1);
+            grid_size = dim3(gridsize, gridsize, 1);
         }
         
-        blocksize = 1024;
-        gridsize = 56;
+        blocksize = 32;
+        gridsize = (number + blocksize - 1) / 32;
+        block_size = dim3(blocksize, blocksize, 1);
+        grid_size = dim3(gridsize, gridsize, 1);
         //Matrix normal transpose
         for (int k = 0; k < NFILES / 2; k++) {
             TIMER_START;
-            transposeGlobalMatrix<<<gridsize, blocksize, sharedMemSize, stream>>>(matrix, transpose, number, number);
+            transposeGlobalMatrix<<<grid_size, block_size, sharedMemSize, stream>>>(matrix, transpose, number, number);
             checkCudaErrors(cudaGetLastError());
+            checkCudaErrors(cudaDeviceSynchronize());
             TIMER_STOP;
             times[1] += TIMER_ELAPSED;
             fprintf(csvtime[k + NFILES / 2], "%f,%ld\n", TIMER_ELAPSED, number); 
             blocksize = blocksize / 2;
-            gridsize = gridsize / 2;
+            gridsize = (number + blocksize - 1) / 32;
+            block_size = dim3(blocksize, blocksize, 1);
+            grid_size = dim3(gridsize, gridsize, 1);
         }
 
         //Lines for debug purposes
@@ -146,8 +156,8 @@ int main(int argc, char *argv[]) {
 
     printf("==============================================================\n");
     printf("STATS\n");
-    printf("Global Matrix Transpose Effective Bandwidth(GB/s): %f\n", (2 * number * number * sizeof(dtype)) / (1e9 * times[1]));
-    printf("Shared Matrix Transpose Effective Bandwidth(GB/s): %f\n", (2 * number * number * sizeof(dtype)) / (1e9 * times[0]));
+    printf("Global Matrix Transpose Effective Bandwidth(GB/s): %f\n", (2 * number * number * sizeof(dtype) * tries) / (1e9 * times[1]));
+    printf("Shared Matrix Transpose Effective Bandwidth(GB/s): %f\n", (2 * number * number * sizeof(dtype) * tries) / (1e9 * times[0]));
     
     return 0;
 }

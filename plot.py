@@ -33,12 +33,12 @@ plt.ylabel("Time (s)")
 plt.tight_layout()
 plt.show()
 
-mean = np.mean(df8['Time'])
-median = np.median(df8['Time'])
-std_dev = np.std(df8['Time'])
-min_val = np.min(df8['Time'])
-max_val = np.max(df8['Time'])
-sum = np.sum(df8['Time'])
+mean = np.mean(df['Time'])
+median = np.median(df['Time'])
+std_dev = np.std(df['Time'])
+min_val = np.min(df['Time'])
+max_val = np.max(df['Time'])
+sum = np.sum(df['Time'])
 
 print("Mean:", mean)
 print("Median:", median)
@@ -48,14 +48,14 @@ print("Max:", max_val)
 print("Sum: ", sum)
 
 fig, axes = plt.subplots(2, 1, figsize=(10, 8))
-bandwidth1 = 0.348492
-bandwidth2 = ((19879305848 + 8695828316) / np.power(10, 9)) / 71.164095
-bandwidth3 = ((19879305848 + 8695828316) / np.power(10, 9)) / 69.479736
-bandwidth4 = ((19879305848 + 8695828316) / np.power(10, 9)) / 60.077699
-bandwidth5 = 36.530886
-bandwidth6 = ((19773088714 + 8642431561) / np.power(10, 9)) / 57.886146999999994
-bandwidth7 = ((19773088714 + 8642431561) / np.power(10, 9)) / 74.12973099999999
-bandwidth8 = ((19773088714 + 8642431561) / np.power(10, 9)) / 75.73757499999999
+bandwidth1 = (34358647168 / np.power(10, 9)) / 6.916496
+bandwidth2 = (34358647168 / np.power(10, 9)) / 0.319151
+bandwidth3 = (34358647168 / np.power(10, 9)) / 0.24118699999999998
+bandwidth4 = (34358647168 / np.power(10, 9)) / 0.18115499999999998
+bandwidth5 = (34358647168 / np.power(10, 9)) / 4.364034
+bandwidth6 = (34358647168 / np.power(10, 9)) / 1.139522
+bandwidth7 = (34358647168 / np.power(10, 9)) / 0.246668
+bandwidth8 = (34358647168 / np.power(10, 9)) / 0.166993
 firstplot = [bandwidth1, bandwidth2, bandwidth3, bandwidth4]
 secondplot = [bandwidth5, bandwidth6, bandwidth7, bandwidth8]
 
