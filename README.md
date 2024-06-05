@@ -93,3 +93,22 @@ The plot in \textbf{figure 7} gives us the possibility to compare the shared and
 ![alt text](https://github.com/Sminnitex/Homework2_GPUComputing/blob/master/figures/940MXBandwidth.png?raw=true)
 
 As we can see the theoretical maximum bandwidth possible of 40.02GB/s for my GPU is often broken, in 5 out of 8 cases. The only reliable result are the 64-14 measure of both techniques, where in each case we are under 10GB/s of bandwidth, and the global matrix transpose for the 32-7 where we are over 25GB/s of bandwidth, so theoretically the best measure. Unfortunately the other measurement aren't reliable and every measure greater for block and grid size gives me errors. So to obtain a more reliable analysis i repeated the experiments on the cluster equipped with an A30. Starting from the time and dimension measure:
+
+![alt text](https://github.com/Sminnitex/Homework2_GPUComputing/blob/master/figures/A30Time.png?raw=true)
+
+The boost on performance given by the device of the Unitn cluster is remarkable, even considered it is needed a change in scale on the graph to compare the results. The pattern of the first analysis remain identical, and as we can see in the \textbf{figure 10}, even the main considerations on the bandwidth analysis remain the same.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.3]{Figures/A30Bandwidth.png}
+    \caption{Bandwidth analysis of A30}
+    \label{fig:enter-label}
+\end{figure}
+
+So it's time to give some conclusions and talk about future improvements for my work. The kernel implementation seem to work for certain block and grid sizes but not for others, the problem for sure relies on the combination between these two hyper parameters, and the others specified on the library, tile dimension and block rows. Adjusting these parameters for each different block and grid size is possible to overcame the problems of overflow, however further test didn't seem to fully confirm my thesis. In fact lowering the tile dimension and block rows parameters from 32-8 to 8-2 seemed only to create more overflows when i expected the opposite.
+
+![alt text](https://github.com/Sminnitex/Homework2_GPUComputing/blob/master/figures/changingHypers.png?raw=true)
+
+Even though, the problem of relations between these 4 hyper parameters seems the most logical explanation considered even the researches on the state of the art I made on the subject. For sure more work would be needed to understand the source of this problems trying on different parameters investigating more. Another interesting result is that the performance seem also to be influenced slightly by the datatype used for our analysis. In fact using float instead of int type to initialize our matrices gives us slightly more outliers as can be seen in the next figure.
+
+![alt text](https://github.com/Sminnitex/Homework2_GPUComputing/blob/master/figures/changingHypersfloat.png?raw=true)
