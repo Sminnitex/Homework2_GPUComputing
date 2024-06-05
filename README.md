@@ -87,7 +87,6 @@ The experiments will vary on the block and grid size instead that with optimizat
 Let's start our analysis considering my laptop performance on time and bandwidth, the matrix dimension vary from a 1024x1024 non symmetrical matrix to a 2047x2047 matrix, the result compared with the ones of section 2 are even 100 times faster in the worst cases scenario on the outliers, and about 20 times faster normally.
 
 ![alt text](https://github.com/Sminnitex/Homework2_GPUComputing/blob/master/figures/940MXTime.png?raw=true)
-https://github.com/Sminnitex/Homework2_GPUComputing/blob/master/figures/940MXTime.png
 
 The plot in \textbf{figure 7} gives us the possibility to compare the shared and global matrix transposes, and according to the change of block and grid size one of the techniques is consistently better then the other. For a block-grid size of 64-14 the global matrix transpose performs way better, but for the 32-7 the shared memory is definitely lower. The measures for 16-3 and 8-1 appears flat really near the 0, let's analyze the bandwidth result to understand more about this.
 
