@@ -19,6 +19,8 @@ axes[0].plot(df3['Dimensions'], df3['Time'], label='16-3', color='green')
 axes[0].plot(df4['Dimensions'], df4['Time'], label='8-1', color='yellow')
 axes[0].set_title('Shared Memory Matrix Transpose')
 axes[0].legend()
+axes[0].set_xlim(1024, 2047)
+axes[0].set_ylim(0, 0.0110)
 
 # Plot second graph
 axes[1].plot(df5['Dimensions'], df5['Time'], label='64-14', color='blue')
@@ -31,6 +33,8 @@ axes[1].legend()
 plt.xlabel("Matrix n*n dimension")
 plt.ylabel("Time (s)")
 plt.tight_layout()
+plt.xlim(1024, 2047)
+plt.ylim(0, 0.0110)
 plt.show()
 
 mean = np.mean(df['Time'])

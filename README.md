@@ -1,3 +1,21 @@
+#   To run the code
+Is sufficient to run the following commands on the repo folder
+``` 
+make
+./bin/assignment2
+``` 
+And to check the plots on python
+``` 
+python plot.py
+``` 
+
+This project is the direct evolution of https://github.com/Sminnitex/Homework1_GPUComputing
+Therefore the prerequisites are the same as the one described in that repository, and are:
+
+>   python3 equipped with matplotlib, pandas and numpy
+>   cuda and the cuda toolkit
+>   gcc and cmake
+
 #   Section 1: problem description
 Our task is to perform a matrix transpose in C, basically the operation consists in invert rows and columns of our source Matrix. To formalize a little bit this concept, we can refer as the transpose of a matrix A as A^T; considering m the dimension of the rows of the matrix A, and n the columns (for brevity I will use the notation A[m][n] to refer to a generic matrix of dimensions m and n), the transpose operation will give us a new matrix A^T[n][m].
 
@@ -47,3 +65,31 @@ Now let's try to calculate the bandwidth to have more data, we will perform this
 
 So as we can expect seeing the time metrics the bandwidth confirms that this code is more efficient for the normal matrix transpose, and in particular for the one -O0 optimization flag. The block matrix transpose, despite being less efficient has a good growth in performance for higher optimization flags.
 
+#   Section3: CUDA Algorithm
+Now we are going to consider an adaptation of our algorithm to run on GPUs with the CUDA APIs. In this case our analysis will no longer consider the normal and block algorithm, but the difference will be underlined by the use of a kernel that uses global or shared memory.
+
+Then again, instead of using the optimization flags comparing how the code reacts to each of them, we will modify the grid and block sizes with which we start the kernel, and therefore the number of threads per block in each iteration. Once again the code will run multiple operations and compute the effective bandwidth, the time and we will progressivly increase the size of the matrices.
+
+Starting from a Kernel that uses global memory, we have to modify the access index that isn't anymore sequential but has to make use of parallelization
+
+The hyperparameter "TILE_DIM" is the dimensions of the square tiles used for the matrix transpose operation, and each time we update the counter i of another hyper-parameter called "BLOCK_ROWS", which instead control the number of rows that each thread processes within a single tile. All considered, though parallelized, is a normal matrix transpose algorithm.
+
+If instead we want to optimize even more considering a shared memory approach, we have to transfer the matrix from global to shared memory and then apply the transpose for every tile, in a, conceptually,  similar way to what we have done with the block matrix transpose.
+
+The main difference is that, instead of relying on device memory, we make use of on-chip memory that has a much lower latency and higher bandwidth. So instead of having each thread directly reading and writing directly on global memory, threads first load data into shared memory (tile) before performing the transpose. This allows for coalesced global memory reads, as threads in a warp access contiguous memory locations. The __syncthreads() call therefore is needed to ensure that all
+reads from the source matrix to shared memory have completed before writing from shared memory to the transpose matrix. Notice that on the shared memory is necessary of increasing by 1 the dimension of the tile dimension to avoid bank conflicts.
+
+#   Section 4: experiments with GPU
+This time the experiments will be tried both on my laptop that uses a NVIDIA 940MX as GPU, with maximum bandwidth of 40.02 GB/s; but also with the Unitn cluster that is equipped with an A30 with maximum bandwidth of 870.22GB/s.
+
+The experiments will vary on the block and grid size instead that with optimization flag, as said in the last section, and we won't use Valgrind to help us in our analysis.
+
+Let's start our analysis considering my laptop performance on time and bandwidth, the matrix dimension vary from a 1024x1024 non symmetrical matrix to a 2047x2047 matrix, the result compared with the ones of section 2 are even 100 times faster in the worst cases scenario on the outliers, and about 20 times faster normally.
+
+![alt text](https://github.com/Sminnitex/Homework1_GPUComputing/blob/master/figures/940MXTime.png?raw=true)
+
+The plot in \textbf{figure 7} gives us the possibility to compare the shared and global matrix transposes, and according to the change of block and grid size one of the techniques is consistently better then the other. For a block-grid size of 64-14 the global matrix transpose performs way better, but for the 32-7 the shared memory is definitely lower. The measures for 16-3 and 8-1 appears flat really near the 0, let's analyze the bandwidth result to understand more about this.
+
+![alt text](https://github.com/Sminnitex/Homework1_GPUComputing/blob/master/figures/940MXBandwidth.png?raw=true)
+
+As we can see the theoretical maximum bandwidth possible of 40.02GB/s for my GPU is often broken, in 5 out of 8 cases. The only reliable result are the 64-14 measure of both techniques, where in each case we are under 10GB/s of bandwidth, and the global matrix transpose for the 32-7 where we are over 25GB/s of bandwidth, so theoretically the best measure. Unfortunately the other measurement aren't reliable and every measure greater for block and grid size gives me errors. So to obtain a more reliable analysis i repeated the experiments on the cluster equipped with an A30. Starting from the time and dimension measure:
